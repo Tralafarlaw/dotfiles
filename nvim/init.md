@@ -40,11 +40,7 @@ nnoremap <F12>: source $MYVIMRC \| :PlugInstall<CR>
 Python paths para algunos plugins
 
 ```vim
-if has('macunix')
-  " OSX
-  let g:python3_host_prog = '/usr/local/bin/python3' "---------- Set python 3 provider
-  let g:python_host_prog = '/usr/local/bin/python2' "-------------- Set python 2 provider
-elseif has('unix')
+if has('unix')
   " Ubuntu
   let g:python3_host_prog = '/usr/bin/python3' "---------- Set python 3 provider
   let g:python_host_prog = '/usr/bin/python' "-------------- Set python 2 provider
@@ -55,7 +51,7 @@ endif
 
 ## GUI Setups
 
-```
+```vim
 :set guioptions-=m "-------------------------------------------- Remove menu bar
 :set guioptions-=T "--------------------------------------------- Remove toolbar
 :set guioptions-=r "------------------------------- Remove right-hand scroll bar
@@ -258,7 +254,8 @@ Plug 'ap/vim-css-color', {
     \ 'css',
     \ 'scss',
     \ 'sass',
-    \ 'less'
+    \ 'less',
+    \ 'svelte',
     \ ] }
 Plug 'Valloric/MatchTagAlways' "------- Always highlights the XML/HTML tags that enclose your cursor location
 Plug 'MTDL9/vim-log-highlighting', {'for': 'log'} "----------------- For Vim Log
@@ -301,7 +298,7 @@ Plug 'prettier/vim-prettier', {
     \ 'html' ] }
 ```
 
-## Addons
+### Addons
 
 ```vim
 Plug 'NLKNguyen/copy-cut-paste.vim' "---------------- Copy, Paste with Clipboard
@@ -314,7 +311,7 @@ Plug 'segeljakt/vim-silicon'
 ### Markdown
 
 ```vim
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install'  }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'godlygeek/tabular', {'for': 'markdown'} "-------------- Alignment for text
 Plug 'dhruvasagar/vim-table-mode',{'for': 'markdown', 'do': ':TableFormat'}
 Plug 'lervag/vimtex', {'for': 'tex'} "------------------- For editing Latex file
@@ -339,9 +336,29 @@ Plug 'voldikss/vim-search-me' "------------------------ Search google within vim
 ## Conqueror of Commands (CoC)
 
 ```vim
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 ```
 
+## JetBrains Integration
+
+```vim
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'beeender/Comrade'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+```
+### Projectile
+Emacs Projectile para neovim
+```vim
+if has('nvim')
+  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/denite.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'dunstontc/projectile.nvim'
+```
 ## Notas
 
 - [ ] MEjorar la descripcion de cada Plugin
@@ -446,6 +463,21 @@ map K <PageUp>
 
 # Plugin Config
 
+## Deoplete 
+Activar al inicar
+```vim
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#source('_', 'smart_case', v:true)
+```
+Configurar Snippets
+```vim
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+```
 ## [Nerdtree](https://github.com/preservim/nerdtree)
 
 ### Settings
@@ -460,7 +492,7 @@ highlight! link NERDTreeFlags NERDTreeDir
 Abrimos  y Cerratmos el NerdTree  usando `Ctrl+n`
 
 ```vim
-map <C-n> :NERDTreeToggle<CR> 
+map zn :NERDTreeToggle<CR> 
 ```
 
 ## [DevIcons](https://github.com/ryanoasis/vim-devicons)
@@ -513,7 +545,7 @@ let g:airline#extensions#nrrwrgn#enabled    = 0
 let g:airline#extensions#promptline#enabled = 0
 let g:airline#extensions#syntastic#enabled  = 0
 let g:airline#extensions#taboo#enabled      = 0
-let g:airline#extensions#tagbar#enabled     = 0
+let g:airline#extensions#tagbar#enabled     = 1
 let g:airline#extensions#virtualenv#enabled = 0
 let g:airline#extensions#whitespace#enabled = 0
 ```
@@ -631,7 +663,7 @@ let g:indentLine_char_list = ['▏', '⎸', '|', '¦', '┆', '┊']
 ```vim
 " Enable just for html, css
 let g:user_emmet_install_global = 0
-autocmd FileType html,css EmmetInstall
+autocmd FileType html,css,svelte EmmetInstall
 
 let g:user_emmet_leader_key='tab' " Trigger emmet with ,,
 
@@ -748,7 +780,3 @@ augroup languages_indent
     autocmd FileType gdscript setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 augroup END
 ```
-
-~~~
-runtime configs/autocomplete.vim "------------------------- Autocomplete configs
-~~~

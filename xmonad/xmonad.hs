@@ -1,11 +1,3 @@
---
--- xmonad example config file.
---
--- A template showing all available configuration hooks,
--- and how to override the defaults in your own xmonad.hs conf file.
---
--- Normally, you'd only override those defaults you care about.
---
 import XMonad
 import XMonad.Config.Kde
 import XMonad.Layout.Fullscreen
@@ -86,6 +78,10 @@ addEWMHFullscreen   = do
     wfs <- getAtom "_NET_WM_STATE_FULLSCREEN"
     mapM_ addNETSupported [wms, wfs]
 
+startup :: X ()
+startup = do
+  automount
+
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
@@ -99,6 +95,7 @@ maimcopy = spawn "maim -s | xclip -selection clipboard -t image/png && notify-se
 maimsave = spawn "maim -s ~/Desktop/$(date +%Y-%m-%d_%H-%M-%S).png && notify-send \"Screenshot\" \"Saved to Desktop\" -i flameshot"
 rofi_launcher = spawn "rofi -no-lazy-grab -show drun -modi run,drun,window -theme $HOME/.config/rofi/launcher/style -drun-icon-theme \"candy-icons\" "
 
+automount = spawn "udiskie"
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
@@ -343,6 +340,7 @@ myStartupHook = do
   spawnOnce "picom --experimental-backends"
   spawnOnce "greenclip daemon"
   spawnOnce "dunst"
+  spawnOnce "udiskie"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.

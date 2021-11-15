@@ -25,3 +25,5 @@ This are my dotfiles feel free to copy and use
 TODO
 # KeyBindings
 TODO
+- [ ] literate config zsh
+- [ ] automante symlink creation

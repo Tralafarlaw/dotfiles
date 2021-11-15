@@ -136,6 +136,12 @@ alias npci="npm ci"
 alias npmig="npm install -g"
 alias npmid="npm install --save-dev"
 
+alias yrun="yarn run"
+
+alias dotfiles="nvim /run/media/miguel/Miguel/projects/Dotfiles/"
+
+alias cdprojects="cd /run/media/miguel/Miguel/projects/"
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # nvm sources
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"

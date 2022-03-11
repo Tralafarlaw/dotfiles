@@ -142,6 +142,12 @@ alias dotfiles="nvim /run/media/miguel/Miguel/projects/Dotfiles/"
 
 alias cdprojects="cd /run/media/miguel/Miguel/projects/"
 
+alias clean="clear"
+
+allsubdir() {
+ **/*(/e:REPLY+=/$1:)
+}
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # nvm sources
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"

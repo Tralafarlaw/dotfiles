@@ -58,6 +58,13 @@ function config.telescope()
                 override_generic_sorter = false,
                 override_file_sorter = true
             },
+            project = {
+                base_dirs = {
+                    {path = '/run/media/miguel/Miguel/projects/', max_depth = 2},
+                    {path = '/run/media/miguel/Miguel/repos/'}
+                },
+                hidden_files = false
+            },
             frecency = {
                 show_scores = true,
                 show_unindexed = true,

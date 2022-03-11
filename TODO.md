@@ -5,13 +5,11 @@ This are my dotfiles feel free to copy and use
 
 # Config Files
 
-- [ ] eww
-- [ ] ncmpcpp 
+- [X] ncmpcpp 
 - [ ] nvim
-- [ ] polybar
-- [ ] xmonad
-- [ ] kde
-- [ ] sddm
+- [X] polybar
+- [X] xmonad
+- [ ] kde (Abandonado)
 - [ ] zsh
 - [ ] rofi
 - [ ] more...
@@ -25,5 +23,3 @@ This are my dotfiles feel free to copy and use
 TODO
 # KeyBindings
 TODO
-- [ ] literate config zsh
-- [ ] automante symlink creation

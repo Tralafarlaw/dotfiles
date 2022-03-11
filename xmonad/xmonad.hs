@@ -3,12 +3,13 @@ import XMonad.Config.Kde
 import XMonad.Layout.Fullscreen
     ( fullscreenEventHook, fullscreenManageHook, fullscreenSupport, fullscreenFull )
 import Data.Monoid ()
-import System.Exit ()
+import System.Exit ( exitSuccess )
 import XMonad.Util.SpawnOnce ( spawnOnce )
 import Graphics.X11.ExtraTypes.XF86 (xF86XK_AudioLowerVolume, xF86XK_AudioRaiseVolume, xF86XK_AudioMute, xF86XK_MonBrightnessDown, xF86XK_MonBrightnessUp, xF86XK_AudioPlay, xF86XK_AudioPrev, xF86XK_AudioNext)
 import XMonad.Hooks.EwmhDesktops ( ewmh )
 import Control.Monad ( join, when )
 import XMonad.Layout.NoBorders
+import XMonad.Prompt.ConfirmPrompt
 import XMonad.Hooks.ManageDocks
     ( avoidStruts, docks, manageDocks, Direction2D(D, L, R, U) )
 import XMonad.Hooks.ManageHelpers ( doFullFloat, isFullscreen )
@@ -22,6 +23,11 @@ import XMonad.Layout.Gaps
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import Data.Maybe (maybeToList)
+import Data.List (sortBy)
+import Data.Function (on)
+import Control.Monad (forM_, join)
+import XMonad.Util.Run (safeSpawn)
+import XMonad.Util.NamedWindows (getName)
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
@@ -141,7 +147,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- GAPS!!!
     , ((modm .|. controlMask, xK_g), sendMessage $ ToggleGaps)               -- toggle all gaps
-    , ((modm .|. shiftMask, xK_g), sendMessage $ setGaps [(L,30), (R,30), (U,40), (D,60)]) -- reset the GapSpec
+    , ((modm .|. shiftMask, xK_g), sendMessage $ setGaps [(L,0), (R,0), (U,40), (D,0)]) -- reset the GapSpec
     
     , ((modm .|. controlMask, xK_t), sendMessage $ IncGap 10 L)              -- increment the left-hand gap
     , ((modm .|. shiftMask, xK_t     ), sendMessage $ DecGap 10 L)           -- decrement the left-hand gap
@@ -207,7 +213,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
-    , ((modm .|. shiftMask, xK_q     ), spawn "~/bin/powermenu.sh")
+    , ((modm .|. shiftMask, xK_q     ),  io exitSuccess )
 
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
@@ -321,7 +327,20 @@ myEventHook = mempty
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
-myLogHook = return ()
+myLogHook = do
+              winset <- gets windowset
+              title <- maybe (return "") (fmap show . getName) . W.peek $ winset
+              let currWs = W.currentTag winset
+              let wss = map W.tag $ W.workspaces winset
+              let wsStr = join $ map (fmt currWs) $ sort' wss
+
+              io $ appendFile "/tmp/.xmonad-title-log" (title ++ "\n")
+              io $ appendFile "/tmp/.xmonad-workspace-log" (wsStr ++ "\n")
+
+              where fmt currWs ws
+                      | currWs == ws = "[" ++ ws ++ "]"
+                      | otherwise    = " " ++ ws ++ " "
+                    sort' = sortBy (compare `on` (!! 0))
 
 ------------------------------------------------------------------------
 -- Startup hook
@@ -332,15 +351,18 @@ myLogHook = return ()
 --
 -- By default, do nothing.
 myStartupHook = do
-  spawnOnce "exec ~/bin/bartoggle"
   spawnOnce "exec ~/bin/eww daemon"
   spawn "xsetroot -cursor_name left_ptr"
   spawn "exec ~/bin/lock.sh"
-  spawnOnce "feh --bg-scale ~/wallpapers/yosemite-lowpoly.jpg"
+  spawnOnce " xwinwrap -g 1920x1080 -ov -ni -s -nf -- gifview -w WID ~/Pictures/bogdan-mb0sco-coffeeanim.gif -a"
   spawnOnce "picom --experimental-backends"
   spawnOnce "greenclip daemon"
   spawnOnce "dunst"
   spawnOnce "udiskie"
+  spawnOnce "nm-applet"
+  spawnOnce "polybar -r main"
+  forM_ [".xmonad-workspace-log", ".xmonad-title-log"] $ \file -> do
+      safeSpawn "mkfifo" ["/tmp/" ++ file]
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
@@ -372,7 +394,7 @@ defaults = def {
 
       -- hooks, layouts
         manageHook = myManageHook, 
-        layoutHook = gaps [(L,30), (R,30), (U,40), (D,60)] $ spacingRaw True (Border 10 10 10 10) True (Border 10 10 10 10) True $ smartBorders $ myLayout,
+        layoutHook = gaps [(L,0), (R,0), (U,40), (D,0)] $ spacingRaw True (Border 10 10 10 10) True (Border 10 10 10 10) True $ smartBorders $ myLayout,
         handleEventHook    = myEventHook,
         logHook            = myLogHook,
         startupHook        = myStartupHook >> addEWMHFullscreen

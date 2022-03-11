@@ -71,6 +71,29 @@ end
 
 function config.nvim_tree()
     local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+    vim.g.nvim_tree_icons = {
+         default= '',
+     symlink= '',
+     git= {
+       unstaged= "",
+       staged= "",
+       unmerged= "",
+       renamed= "➜",
+       untracked= "",
+       deleted= "",
+       ignored= ""
+       },
+     folder= {
+       arrow_open= "",
+       arrow_closed= "",
+       default= "",
+       open= "",
+       empty= "",
+       empty_open= "",
+       symlink="",
+       symlink_open= "",
+       }
+    }
     require('nvim-tree').setup {
         gitignore = true,
         ignore = {'.git', 'node_modules', '.cache'},
@@ -143,7 +166,7 @@ function config.nvim_bufferline()
                 return string.format('%s·%s', opts.raise(opts.ordinal),
                                      opts.lower(opts.id))
             end,
-            modified_icon = '✥',
+            modified_icon = '',
             buffer_close_icon = '',
             left_trunc_marker = "",
             right_trunc_marker = "",

@@ -110,7 +110,7 @@ tools['folke/which-key.nvim'] = {
                     i = { "<cmd>PackerInstall<CR>", "Packer Install" },
                     c = { "<cmd>PackerClean<CR>", "Packer Clean" },
                     l = { "<cmd>PackerStatus<CR>", "Packer Status" },
-                    c = { "<cmd>PackerCompile<CR>", "Packer Compile" },
+                    C = { "<cmd>PackerCompile<CR>", "Packer Compile" },
                     u = { "<cmd>PackerUpdate<CR>", "Packer Update" },
                 }
             }

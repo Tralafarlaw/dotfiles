@@ -49,7 +49,7 @@ local leader_map = function()
 end
 
 local neovide_config = function()
-    vim.o.guifont = "MonoLisa,Hack,FiraCode Nerd Font Mono,Material Icons:h20"
+    vim.cmd [[set guifont=MonoLisa,JetBrainsMono\ Nerd\ Font,BlexMono\ Nerd\ Font\ Mono,JetBrainsMono\ NL,FreeMono,Hack,FiraCode\ Nerd\ Font\ Mono,Material\ Icons:h20"]]
     vim.g.neovide_refresh_rate = 60
     vim.g.neovide_cursor_vfx_mode = "railgun"
     vim.g.neovide_no_idle = true

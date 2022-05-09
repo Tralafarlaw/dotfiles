@@ -351,6 +351,7 @@ myLogHook = do
 --
 -- By default, do nothing.
 myStartupHook = do
+  spawnOnce "udiskie --tray"
   spawnOnce "exec ~/bin/eww daemon"
   spawn "xsetroot -cursor_name left_ptr"
   spawn "exec ~/bin/lock.sh"
@@ -358,11 +359,8 @@ myStartupHook = do
   spawnOnce "picom --experimental-backends"
   spawnOnce "greenclip daemon"
   spawnOnce "dunst"
-  spawnOnce "udiskie"
   spawnOnce "nm-applet"
   spawnOnce "polybar -r main"
-  forM_ [".xmonad-workspace-log", ".xmonad-title-log"] $ \file -> do
-      safeSpawn "mkfifo" ["/tmp/" ++ file]
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.

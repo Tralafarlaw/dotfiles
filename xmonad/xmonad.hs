@@ -32,6 +32,7 @@ import XMonad.Util.NamedWindows (getName)
 -- certain contrib modules.
 --
 myTerminal      = "kitty"
+mySecondaryTerminal      = "alacritty"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -100,11 +101,13 @@ rofi_launcher = spawn "rofi -no-lazy-grab -show drun -modi run,drun,window -drun
 
 automount = spawn "udiskie"
 
+
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
-
+    -- launch  secondary terminal
+    , ((modm .|. controlMask, xK_Return), spawn mySecondaryTerminal)
     -- lock screen
     , ((modm,               xK_F1    ), spawn "betterlockscreen -l")
 
